@@ -4,5 +4,23 @@
     "mongoose": "^6.2.7",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15"
-  }
+  },
+  "name": "uber-everyday-backend",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abhishekkr28/Uber-Everyday-Backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abhishekkr28/Uber-Everyday-Backend/issues"
+  },
+  "homepage": "https://github.com/Abhishekkr28/Uber-Everyday-Backend#readme",
+  "description": ""
 }
