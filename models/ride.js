@@ -21,12 +21,13 @@ const rideSchema = new Schema({
         }
     },
     timing: reqString,
-    // total_rides
-    // weekly_freq
-    completed_rides: {
-        type: Number,
-        default: 0,
+    total_rides: {
+        type: [Number],
         required: true
+    },
+    ride_status: {
+        type: [Number],
+        required: true,
     },
     start_date: {
         type: Date
@@ -35,23 +36,6 @@ const rideSchema = new Schema({
         type: Date
     }
 }, { timestamps: true })
-const userSchema = new Schema({
-    name: reqString,
-    age: {
-        type: Number
-    },
-    phone: {
-        type: Number,
-        required: true
-    },
-    email: reqString,
-    ride: {
-        type: [rideSchema],
-        required: true
-    }
 
-
-}, { timestamps: true })
-const User = mongoose.model('User', userSchema);
 const Ride = mongoose.model('Ride', rideSchema);
-module.exports = { User, Ride };
+module.exports = Ride;
