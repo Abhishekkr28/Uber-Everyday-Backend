@@ -6,7 +6,6 @@ const rideStatus = require("./src/routers/ridestatus.js");
 // express app
 const app = express();
 app.listen(3000);
-
 app.use(express.json());
 app.use(newUser);
 app.use(newRide);

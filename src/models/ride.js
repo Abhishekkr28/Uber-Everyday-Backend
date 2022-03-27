@@ -6,6 +6,10 @@ const reqString = {
 
 }
 const rideSchema = new Schema({
+    phone: {
+        type: Number,
+        required: true
+    },
     source: {
         place_name: reqString,
         place_cord: {

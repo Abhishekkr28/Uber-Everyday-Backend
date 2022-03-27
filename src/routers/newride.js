@@ -2,28 +2,31 @@ const express = require('express')
 const User = require('../models/user.js');
 const Ride = require('../models/ride.js');
 
-const newRide = async(req, res) => {
-    const phone = req.query.phone;
-    const newride = new Ride({...req.body });
+const newRide = async (req, res) => {
     try {
+        const phone = req.query.phone;
+        const newride = new Ride({ ...req.body });
         const user = await User.findOne({ phone });
-        user.ride.push(newride);
-        await user.save();
-        res.status(201).send(user);
+
+        if (user) {
+            await newride.save();
+            user.ride.push(newride.id);
+            await user.save();
+            res.status(201).send(user);
+        }
+        else {
+            res.status(404).send("User not Found")
+        }
     } catch (err) {
         console.error(err);
-        res.status(500).send(err);
+        res.status(500).send(err);;
     }
 }
 
-const currentRides = async(req, res) => {
-    const phone = req.query.phone;
+const getAllUserRides = async (req, res) => {
     try {
-        const user = await User.findOne({ phone });
-        const rides = [];
-        user.ride.forEach(r => {
-            rides.push(r);
-        });
+        const phone = req.query.phone;
+        const rides = await Ride.find({ phone });
         res.status(200).send(rides);
     } catch (err) {
         console.error(err);
@@ -31,17 +34,35 @@ const currentRides = async(req, res) => {
     }
 }
 
-const deleteRide = async(req, res) => {
-    const phone = req.query.phone;
-    const id = req.query.id;
+const getRide = async (req, res) => {
     try {
-        const user = await User.findOne({ phone });
-        for (let i = 0; i < user.ride.length; i++) {
-            if (user.ride[i]._id == id)
-                user.ride.splice(i, 1);
+        const id = req.body.id;
+        const ride = await Ride.findOne({ id });
+        res.status(200).send(ride);
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+    }
+}
+
+const deleteRide = async (req, res) => {
+    try {
+        const id = req.query.id;
+        const ride = await Ride.findOne({ id });
+        if (ride) {
+            const user = await User.findOne({ phone: ride.phone });
+            if (user) {
+                user.ride = user.ride.filter(rideId => rideId != id);
+                await user.save();
+                await Ride.deleteMany(ride);
+                res.status(200).send(ride);
+            }
         }
-        await user.save();
-        res.status(201).send(user.ride);
+        else {
+            res.status(404).send("Ride no Found!");
+        }
+
     } catch (err) {
         console.error(err);
         res.status(500).send(err);
@@ -52,6 +73,7 @@ const router = new express.Router();
 
 router.post("/newRide", newRide);
 router.post("/deleteRide", deleteRide);
-router.get("/currentRides", currentRides);
+router.get("/getAllUserRides", getAllUserRides);
+router.get("/getRide", getRide);
 
 module.exports = router;
