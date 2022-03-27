@@ -19,7 +19,6 @@ const userSchema = new Schema({
     email: reqString,
     ride: {
         type: [rideSchema],
-
         required: true
     }
 }, { timestamps: true })

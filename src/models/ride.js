@@ -23,6 +23,7 @@ const rideSchema = new Schema({
     timing: reqString,
     total_traveller: {
         type: Number,
+        max: 4,
         required: true
     },
     ride_info: {
@@ -35,8 +36,8 @@ const rideSchema = new Schema({
                 type: Number,
                 required: true
             }
-        }],
-        required: true
+        }]
+
     },
     start_date: {
         type: Date
