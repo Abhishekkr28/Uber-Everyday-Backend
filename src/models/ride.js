@@ -21,13 +21,22 @@ const rideSchema = new Schema({
         }
     },
     timing: reqString,
-    total_rides: {
-        type: [Number],
+    total_traveller: {
+        type: Number,
         required: true
     },
-    ride_status: {
-        type: [Number],
-        required: true,
+    ride_info: {
+        type: [{
+            ride_date: {
+                type: Date,
+                required: true
+            },
+            ride_status: {
+                type: Number,
+                required: true
+            }
+        }],
+        required: true
     },
     start_date: {
         type: Date
