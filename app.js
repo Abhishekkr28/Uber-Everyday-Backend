@@ -1,12 +1,14 @@
-const express = require('express');
-require('./src/database/mongoose.js');
-const newUser = require("./src/routers/newuser.js");
-const newRide = require("./src/routers/newride.js");
-const rideStatus = require("./src/routers/ridestatus.js");
+const express = require("express");
+const morgan = require("morgan");
+
+require("./src/database/mongoose.js");
+const Ride = require("./src/routers/ride.js");
+const User = require("./src/routers/user.js");
+
 // express app
 const app = express();
 app.listen(3000);
 app.use(express.json());
-app.use(newUser);
-app.use(newRide);
-app.use(rideStatus);
+app.use(morgan("tiny"));
+app.use(Ride);
+app.use(User);

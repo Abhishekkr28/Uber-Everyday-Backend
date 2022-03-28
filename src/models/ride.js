@@ -6,10 +6,6 @@ const reqString = {
 };
 const rideSchema = new Schema(
   {
-    phone: {
-      type: Number,
-      required: true,
-    },
     source: {
       place_name: reqString,
       place_cord: {
@@ -49,6 +45,11 @@ const rideSchema = new Schema(
     },
     end_date: {
       type: Date,
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
     },
   },
   { timestamps: true }
