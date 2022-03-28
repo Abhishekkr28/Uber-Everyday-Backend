@@ -26,20 +26,6 @@ const rideSchema = new Schema(
       max: 4,
       required: true,
     },
-    ride_info: {
-      type: [
-        {
-          ride_date: {
-            type: Date,
-            required: true,
-          },
-          ride_status: {
-            type: Number,
-            required: true,
-          },
-        },
-      ],
-    },
     start_date: {
       type: Date,
     },
@@ -52,8 +38,15 @@ const rideSchema = new Schema(
       ref: "User",
     },
   },
-  { timestamps: true }
+
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+rideSchema.virtual("ride_info", {
+  ref: "Trip",
+  localField: "_id",
+  foreignField: "owner",
+});
 
 const Ride = mongoose.model("Ride", rideSchema);
 module.exports = Ride;

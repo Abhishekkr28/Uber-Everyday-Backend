@@ -18,7 +18,7 @@ const userSchema = new Schema(
     },
     email: reqString,
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 userSchema.virtual("ride", {
