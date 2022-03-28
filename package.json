@@ -3,7 +3,9 @@
     "express": "^4.17.3",
     "mongoose": "^6.2.7",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "pdf-creator-node": "^2.3.4",
+    "pdfkit": "^0.13.0"
   },
   "name": "uber-everyday-backend",
   "version": "1.0.0",

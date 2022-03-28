@@ -5,6 +5,7 @@ require("./src/database/mongoose.js");
 const Ride = require("./src/routers/ride.js");
 const User = require("./src/routers/user.js");
 const Trip = require("./src/routers/trip.js");
+const Pdf = require("./src/routers/createPdf.js")
 
 // express app
 const app = express();
@@ -16,3 +17,4 @@ app.use(morgan("tiny"));
 app.use(Ride);
 app.use(User);
 app.use(Trip);
+app.use(Pdf);
