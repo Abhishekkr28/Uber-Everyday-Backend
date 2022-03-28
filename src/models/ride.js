@@ -6,6 +6,10 @@ const reqString = {
 };
 const rideSchema = new Schema(
   {
+    phone: {
+      type: Number,
+      required: true,
+    },
     source: {
       place_name: reqString,
       place_cord: {
@@ -21,13 +25,24 @@ const rideSchema = new Schema(
       },
     },
     timing: reqString,
-    total_rides: {
-      type: [Number],
+    total_traveller: {
+      type: Number,
+      max: 4,
       required: true,
     },
-    ride_status: {
-      type: [Number],
-      required: true,
+    ride_info: {
+      type: [
+        {
+          ride_date: {
+            type: Date,
+            required: true,
+          },
+          ride_status: {
+            type: Number,
+            required: true,
+          },
+        },
+      ],
     },
     start_date: {
       type: Date,
