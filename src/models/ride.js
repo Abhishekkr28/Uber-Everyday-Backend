@@ -94,6 +94,8 @@ rideSchema.pre("save", async function (next) {
     const distanceCharge = ratePerKm * distanceInKm;
     const rideTimeCharge = rideTimeChargePerMin * timeInMin;
     const perDayCost = basePrice + distanceCharge + rideTimeCharge;
+    // 5% discount
+    perDayCost *= 0.95;
     const cost = 0;
     // end logic
 
