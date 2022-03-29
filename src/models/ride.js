@@ -37,7 +37,8 @@ const rideSchema = new Schema(
     total_traveller: {
       type: Number,
       max: 4,
-      required: true,
+      required: false,
+      default: 1,
     },
     start_date: {
       type: Date,
