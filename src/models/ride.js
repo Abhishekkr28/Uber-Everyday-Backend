@@ -1,89 +1,96 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const reqString = {
-  type: String,
-  required: true,
+    type: String,
+    required: true,
 };
-const rideSchema = new Schema(
-  {
-    source: {
-      place_name: reqString,
-      place_cord: {
-        type: [Number, Number],
-        required: true,
-      },
+const rideSchema = new Schema({
+        source: {
+            place_name: reqString,
+            place_cord: {
+                type: [Number, Number],
+                required: true,
+            },
+        },
+        destination: {
+            place_name: reqString,
+            place_cord: {
+                type: [Number, Number],
+                required: true,
+            },
+        },
+        timing: reqString,
+        total_traveller: {
+            type: Number,
+            max: 4,
+            required: true,
+        },
+        start_date: {
+            type: Date,
+        },
+        end_date: {
+            type: Date,
+        },
+        owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "User",
+        },
+        cost: {
+            type: Number,
+            required: false,
+            default: -1,
+        },
+        bill: {
+            type: Number,
+            required: false,
+        },
     },
-    destination: {
-      place_name: reqString,
-      place_cord: {
-        type: [Number, Number],
-        required: true,
-      },
-    },
-    timing: reqString,
-    total_traveller: {
-      type: Number,
-      max: 4,
-      required: true,
-    },
-    start_date: {
-      type: Date,
-    },
-    end_date: {
-      type: Date,
-    },
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
-    cost: {
-      type: Number,
-      required: false,
-      default: -1,
-    },
-    bill: {
-      type: Number,
-      required: false,
-    },
-  },
 
-  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+    { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 rideSchema.virtual("ride_info", {
-  ref: "Trip",
-  localField: "_id",
-  foreignField: "owner",
+    ref: "Trip",
+    localField: "_id",
+    foreignField: "owner",
 });
 
-rideSchema.methods.calculateBill = async function () {
-  const ride = this;
+rideSchema.methods.calculateBill = async function() {
+    const ride = this;
 
-  /**
-   * Calculate bill
-   */
-  const bill = 0;
-  // END LOGIC
+    /**
+     * Calculate bill
+     */
+    const bill = 0;
+    // END LOGIC
 
-  ride.bill = bill;
-  await ride.save();
+    ride.bill = bill;
+    await ride.save();
 
-  return bill;
+    return bill;
 };
 
-rideSchema.pre("save", async function (next) {
-  const ride = this;
+rideSchema.pre("save", async function(next) {
+    const ride = this;
 
-  if (ride.cost == -1) {
-    // calculate cost;
-    const cost = 0;
-    // end logic
+    if (ride.cost == -1) {
+        // calculate cost;
+        const cost = 0;
+        const basePrice = 53;
+        const ratePerKm = 7;
+        const rideTimeChargePerMin = 0.8;
+        const distanceInKm = ride.distance;
+        const timeInMin = ride.duration;
+        const distanceCharge = ratePerKm * distanceInKm;
+        const rideTimeCharge = rideTimeChargePerMin * timeInMin;
+        cost = basePrice + distanceCharge + rideTimeCharge;
+        // end logic
 
-    ride.cost = cost;
-  }
+        ride.cost = cost;
+    }
 
-  next();
+    next();
 });
 
 const Ride = mongoose.model("Ride", rideSchema);
