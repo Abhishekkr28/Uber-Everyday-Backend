@@ -21,7 +21,7 @@ const rideSchema = new Schema(
       },
     },
     timing: reqString,
-    total_traveller: {
+    total_traveler: {
       type: Number,
       max: 4,
       required: true,
@@ -57,7 +57,7 @@ rideSchema.virtual("ride_info", {
   foreignField: "owner",
 });
 
-rideSchema.methods.calculateBill = function async () {
+rideSchema.methods.calculateBill = function async() {
   const ride = this;
 
   /**
