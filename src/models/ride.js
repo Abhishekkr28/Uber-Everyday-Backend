@@ -32,6 +32,10 @@ const rideSchema = new Schema(
     end_date: {
       type: Date,
     },
+    days: {
+      type: [Number],
+      required: true,
+    },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -41,6 +45,9 @@ const rideSchema = new Schema(
       type: Number,
       required: false,
       default: -1,
+    },
+    per_ride_avg: {
+      type: Number,
     },
     bill: {
       type: Number,
@@ -59,6 +66,7 @@ rideSchema.virtual("ride_info", {
 
 rideSchema.methods.calculateBill = async function () {
   const ride = this;
+  await ride.populate("ride_info");
 
   /**
    * Calculate bill
@@ -67,6 +75,7 @@ rideSchema.methods.calculateBill = async function () {
   // END LOGIC
 
   ride.bill = bill;
+  await ride.depopulate("ride_info");
   await ride.save();
 
   return bill;
@@ -77,7 +86,6 @@ rideSchema.pre("save", async function (next) {
 
   if (ride.cost == -1) {
     // calculate cost;
-    const cost = 0;
     const basePrice = 53;
     const ratePerKm = 7;
     const rideTimeChargePerMin = 0.8;
@@ -85,9 +93,11 @@ rideSchema.pre("save", async function (next) {
     const timeInMin = ride.duration;
     const distanceCharge = ratePerKm * distanceInKm;
     const rideTimeCharge = rideTimeChargePerMin * timeInMin;
-    cost = basePrice + distanceCharge + rideTimeCharge;
+    const perDayCost = basePrice + distanceCharge + rideTimeCharge;
+    const cost = 0;
     // end logic
 
+    ride.per_ride_avg = perDayCost;
     ride.cost = cost;
   }
 
