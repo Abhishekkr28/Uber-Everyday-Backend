@@ -21,7 +21,7 @@ const rideSchema = new Schema(
       },
     },
     timing: reqString,
-    total_traveler: {
+    total_traveller: {
       type: Number,
       max: 4,
       required: true,
