@@ -9,8 +9,9 @@ const Pdf = require("./src/routers/createPdf.js")
 
 // express app
 const app = express();
-app.listen(3001, () => {
-  console.log("Running on port 3001");
+let port = process.env.PORT || 3001;
+app.listen(port, () => {
+    console.log("Running on port 3001");
 });
 app.use(express.json());
 app.use(morgan("tiny"));
