@@ -57,7 +57,7 @@ rideSchema.virtual("ride_info", {
   foreignField: "owner",
 });
 
-rideSchema.methods.calculateBill = function async() {
+rideSchema.methods.calculateBill = async function () {
   const ride = this;
 
   /**
