@@ -2,6 +2,7 @@ const express = require("express");
 const Trip = require("../models/trip.js");
 
 const auth = require("../middleware/auth");
+const Ride = require("../models/ride.js");
 
 const getTrip = async (req, res) => {
   try {
@@ -45,6 +46,12 @@ const completeTrip = async (req, res) => {
     const trip = await Trip.findByIdAndUpdate(req.params.id, {
       ride_status: 1,
     });
+
+    const ride = await Ride.findByIdAndUpdate(trip.owner, {
+      $inc: { completedTrips: 1 },
+    });
+
+    await ride.save();
     trip.ride_status = 1;
     res.status(200).send(trip);
   } catch (err) {

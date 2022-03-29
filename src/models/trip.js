@@ -10,6 +10,11 @@ const tripSchema = new Schema({
     type: Number,
     default: 0,
   },
+  // ride_shared: {
+  //   type: Boolean,
+  //   required: false,
+  //   default: false,
+  // },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

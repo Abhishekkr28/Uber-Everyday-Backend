@@ -24,6 +24,7 @@ const getInvoice = async (req, res) => {
       _id,
       owner: req.user._id,
     }).populate("ride_info");
+    await currentUserRide.calculateBill();
     if (currentUserRide) {
       let doc = new pdf({ margin: 50 });
       doc.pipe(res);

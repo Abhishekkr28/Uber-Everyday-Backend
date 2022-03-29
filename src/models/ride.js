@@ -20,7 +20,20 @@ const rideSchema = new Schema(
         required: true,
       },
     },
+    duration: {
+      type: Number,
+      required: true,
+    },
+    distance: {
+      type: Number,
+      required: true,
+    },
     timing: reqString,
+    sharing_allowed: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     total_traveller: {
       type: Number,
       max: 4,
@@ -49,9 +62,18 @@ const rideSchema = new Schema(
     per_ride_avg: {
       type: Number,
     },
+    bill_no_discount: {
+      type: Number,
+      required: false,
+    },
     bill: {
       type: Number,
       required: false,
+    },
+    completedTrips: {
+      type: Number,
+      required: false,
+      default: 0,
     },
   },
 
@@ -93,12 +115,14 @@ rideSchema.pre("save", async function (next) {
     const timeInMin = ride.duration;
     const distanceCharge = ratePerKm * distanceInKm;
     const rideTimeCharge = rideTimeChargePerMin * timeInMin;
-    const perDayCost = basePrice + distanceCharge + rideTimeCharge;
+    let perDayCost = basePrice + distanceCharge + rideTimeCharge;
+    const withoutDiscountCost = 0;
     // 5% discount
     perDayCost *= 0.95;
     const cost = 0;
     // end logic
 
+    ride.bill_no_discount = withoutDiscountCost;
     ride.per_ride_avg = perDayCost;
     ride.cost = cost;
   }
