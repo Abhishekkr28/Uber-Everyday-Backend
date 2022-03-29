@@ -20,7 +20,15 @@ const rideSchema = new Schema(
         required: true,
       },
     },
+    distance: {
+      type: Number,
+      required: true,
+    },
     timing: reqString,
+    duration: {
+      type: Number,
+      required: true,
+    },
     total_traveller: {
       type: Number,
       max: 4,
