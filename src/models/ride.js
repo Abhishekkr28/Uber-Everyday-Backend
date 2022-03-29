@@ -20,15 +20,7 @@ const rideSchema = new Schema(
         required: true,
       },
     },
-    distance: {
-      type: Number,
-      required: true,
-    },
     timing: reqString,
-    duration: {
-      type: Number,
-      required: true,
-    },
     total_traveller: {
       type: Number,
       max: 4,
@@ -65,7 +57,7 @@ rideSchema.virtual("ride_info", {
   foreignField: "owner",
 });
 
-rideSchema.methods.calculateBill = function async () {
+rideSchema.methods.calculateBill = async function () {
   const ride = this;
 
   /**
@@ -86,6 +78,14 @@ rideSchema.pre("save", async function (next) {
   if (ride.cost == -1) {
     // calculate cost;
     const cost = 0;
+    const basePrice = 53;
+    const ratePerKm = 7;
+    const rideTimeChargePerMin = 0.8;
+    const distanceInKm = ride.distance;
+    const timeInMin = ride.duration;
+    const distanceCharge = ratePerKm * distanceInKm;
+    const rideTimeCharge = rideTimeChargePerMin * timeInMin;
+    cost = basePrice + distanceCharge + rideTimeCharge;
     // end logic
 
     ride.cost = cost;
