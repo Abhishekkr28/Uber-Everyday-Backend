@@ -1,31 +1,35 @@
 {
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.3",
-    "moment": "^2.29.1",
-    "mongoose": "^6.2.7",
-    "morgan": "^1.10.0",
-    "nodemailer": "^6.7.3",
-    "nodemon": "^2.0.15",
-    "pdf-creator-node": "^2.3.4",
-    "pdfkit": "^0.13.0"
-  },
-  "name": "uber-everyday-backend",
-  "version": "1.0.0",
-  "main": "app.js",
-  "scripts": {
-    "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Abhishekkr28/Uber-Everyday-Backend.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Abhishekkr28/Uber-Everyday-Backend/issues"
-  },
-  "homepage": "https://github.com/Abhishekkr28/Uber-Everyday-Backend#readme",
-  "description": ""
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.17.3",
+        "moment": "^2.29.1",
+        "mongoose": "^6.2.7",
+        "morgan": "^1.10.0",
+        "nodemailer": "^6.7.3",
+        "nodemon": "^2.0.15",
+        "pdf-creator-node": "^2.3.4",
+        "pdfkit": "^0.13.0"
+    },
+    "name": "uber-everyday-backend",
+    "version": "1.0.0",
+    "main": "app.js",
+    "scripts": {
+        "start": "nodemon app.js",
+        "dev": "env-cmd -f ./.env nodemon app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Abhishekkr28/Uber-Everyday-Backend.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Abhishekkr28/Uber-Everyday-Backend/issues"
+    },
+    "homepage": "https://github.com/Abhishekkr28/Uber-Everyday-Backend#readme",
+    "description": "",
+    "devDependencies": {
+        "env-cmd": "^10.1.0"
+    }
 }
