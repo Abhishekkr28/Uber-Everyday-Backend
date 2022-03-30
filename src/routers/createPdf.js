@@ -39,7 +39,7 @@ function generateCustomerInformation(doc, invoice) {
     .text("Invoice Date:", 50, customerInformationTop + 15)
     .text(date, 150, customerInformationTop + 15)
     .text("Balance Due:", 50, customerInformationTop + 30)
-    .text(invoice.bill, 150, customerInformationTop + 30)
+    .text("INR " + invoice.bill, 150, customerInformationTop + 30)
     .font("Helvetica-Bold")
     .text("Source: ", 50, customerInformationTop + 45)
     .text(invoice.source.place_name, 150, customerInformationTop + 45)
