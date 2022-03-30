@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
+const { roundedRect } = require("pdfkit");
 const Schema = mongoose.Schema;
 const reqString = {
     type: String,
@@ -72,7 +74,8 @@ const rideSchema = new Schema(
         },
         totalTripsPlanned: {
             type: Number,
-            required: true,
+            required: false,
+            default: -1,
         },
         completedTrips: {
             type: Number,
@@ -111,6 +114,22 @@ rideSchema.methods.calculateBill = async function () {
 
 rideSchema.pre("save", async function (next) {
     const ride = this;
+
+    if (ride.totalTripsPlanned == -1) {
+        var start_date = moment(ride.start_date);
+        var end_date = moment(ride.end_date);
+        var count = 0;
+        for (var m = moment(start_date); m.isBefore(end_date); m.add(1, 'days')) {
+            var day = m.day();
+            if (ride.days.includes(day)) {
+                count = count + 1;
+            }
+        }
+        if (ride.days.includes(end_date.day()))
+            count = count + 1;
+
+        ride.totalTripsPlanned = count;
+    }
 
     if (ride.cost == -1) {
         // calculate cost;
