@@ -1,4 +1,8 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
+const nodemailer = require("nodemailer");
+const User = require("./user");
+
 const Schema = mongoose.Schema;
 const reqString = {
   type: String,
@@ -10,14 +14,14 @@ const rideSchema = new Schema(
       place_name: reqString,
       place_cord: {
         type: [Number, Number],
-        required: true,
+        required: false,
       },
     },
     destination: {
       place_name: reqString,
       place_cord: {
         type: [Number, Number],
-        required: true,
+        required: false,
       },
     },
     duration: {
@@ -37,8 +41,7 @@ const rideSchema = new Schema(
     total_traveller: {
       type: Number,
       max: 4,
-      required: false,
-      default: 1,
+      required: true,
     },
     start_date: {
       type: Date,
@@ -73,7 +76,8 @@ const rideSchema = new Schema(
     },
     totalTripsPlanned: {
       type: Number,
-      required: true,
+      required: false,
+      default: -1,
     },
     completedTrips: {
       type: Number,
@@ -113,6 +117,21 @@ rideSchema.methods.calculateBill = async function () {
 rideSchema.pre("save", async function (next) {
   const ride = this;
 
+  if (ride.totalTripsPlanned == -1) {
+    var start_date = moment(ride.start_date);
+    var end_date = moment(ride.end_date);
+    var count = 0;
+    for (var m = moment(start_date); m.isBefore(end_date); m.add(1, "days")) {
+      var day = m.day();
+      if (ride.days.includes(day)) {
+        count = count + 1;
+      }
+    }
+    if (ride.days.includes(end_date.day())) count = count + 1;
+
+    ride.totalTripsPlanned = count;
+  }
+
   if (ride.cost == -1) {
     // calculate cost;
     const basePrice = 53;
@@ -140,6 +159,33 @@ rideSchema.pre("save", async function (next) {
     ride.per_ride_avg = perDayCost;
     ride.cost = cost;
   }
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "ubereveryday5@gmail.com",
+      pass: "Uber@123",
+    },
+  });
+
+  const user = await User.findById(ride.owner);
+  const email = user.email;
+  const name = user.name;
+  const mailOptions = {
+    from: "ubereveryday5@gmail.com",
+    to: email,
+    subject: "Uber EveryDay subscription Ride id: " + ride._id,
+    text:
+      "Congratulations " +
+      name +
+      "! your subscription has been booked successfully.",
+  };
+  transporter.sendMail(mailOptions, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Email sent to " + email);
+    }
+  });
 
   next();
 });
