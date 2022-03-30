@@ -1,13 +1,15 @@
 const mongoose = require("mongoose");
 const moment = require("moment");
+const nodemailer = require('nodemailer');
 const { roundedRect } = require("pdfkit");
+const User = require("./user");
+
 const Schema = mongoose.Schema;
 const reqString = {
     type: String,
     required: true,
 };
-const rideSchema = new Schema(
-    {
+const rideSchema = new Schema({
         source: {
             place_name: reqString,
             place_cord: {
@@ -93,7 +95,7 @@ rideSchema.virtual("ride_info", {
     foreignField: "owner",
 });
 
-rideSchema.methods.calculateBill = async function () {
+rideSchema.methods.calculateBill = async function() {
     const ride = this;
     await ride.populate("ride_info");
 
@@ -112,7 +114,7 @@ rideSchema.methods.calculateBill = async function () {
     return bill;
 };
 
-rideSchema.pre("save", async function (next) {
+rideSchema.pre("save", async function(next) {
     const ride = this;
 
     if (ride.totalTripsPlanned == -1) {
@@ -158,6 +160,31 @@ rideSchema.pre("save", async function (next) {
         ride.per_ride_avg = perDayCost;
         ride.cost = cost;
     }
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'ubereveryday5@gmail.com',
+            pass: 'Uber@123'
+        }
+    });
+
+    const user = await User.findById(ride.owner);
+    const email = user.email;
+    const name = user.name;
+    const mailOptions = {
+
+        from: 'ubereveryday5@gmail.com',
+        to: email,
+        subject: 'Uber EveryDay subscription Ride id: ' + ride._id,
+        text: 'Congratulations ' + name + '! your subscription has been booked successfully.'
+    };
+    transporter.sendMail(mailOptions, function(err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Email sent to ' + email);
+        }
+    });
 
     next();
 });
