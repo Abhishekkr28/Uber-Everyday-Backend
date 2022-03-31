@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const moment = require("moment");
-const nodemailer = require("nodemailer");
-const User = require("./user");
 
 const Schema = mongoose.Schema;
 const reqString = {
@@ -159,33 +157,6 @@ rideSchema.pre("save", async function (next) {
     ride.per_ride_avg = perDayCost.toFixed(2);
     ride.cost = cost.toFixed(2);
   }
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "ubereveryday5@gmail.com",
-      pass: "Uber@123",
-    },
-  });
-
-  const user = await User.findById(ride.owner);
-  const email = user.email;
-  const name = user.name;
-  const mailOptions = {
-    from: "ubereveryday5@gmail.com",
-    to: email,
-    subject: "Uber EveryDay subscription Ride id: " + ride._id,
-    text:
-      "Congratulations " +
-      name +
-      "! your subscription has been booked successfully.",
-  };
-  transporter.sendMail(mailOptions, function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("Email sent to " + email);
-    }
-  });
 
   next();
 });

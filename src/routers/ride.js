@@ -2,10 +2,39 @@ const express = require("express");
 const Ride = require("../models/ride.js");
 const auth = require("../middleware/auth");
 
+const nodemailer = require("nodemailer");
+
 const newRide = async (req, res) => {
   try {
     const ride = new Ride({ ...req.body, owner: req.user._id });
     await ride.save();
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "ubereveryday5@gmail.com",
+        pass: "Uber@123",
+      },
+    });
+
+    const email = req.user.email;
+    const name = req.user.name;
+    const mailOptions = {
+      from: "ubereveryday5@gmail.com",
+      to: email,
+      subject: "Uber EveryDay subscription Ride id: " + ride._id,
+      text:
+        "Congratulations " +
+        name +
+        "! your subscription has been booked successfully.",
+    };
+    transporter.sendMail(mailOptions, function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Email sent to " + email);
+      }
+    });
     res.status(201).send(ride);
   } catch (err) {
     console.error(err);
