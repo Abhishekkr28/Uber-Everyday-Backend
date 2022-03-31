@@ -38,16 +38,20 @@ function generateCustomerInformation(doc, invoice) {
     .font("Helvetica")
     .text("Invoice Date:", 50, customerInformationTop + 15)
     .text(date, 150, customerInformationTop + 15)
-    .text("Balance Due:", 50, customerInformationTop + 30)
-    .text("INR " + invoice.bill, 150, customerInformationTop + 30)
+    .text("Bill:", 50, customerInformationTop + 30)
+    .text("INR " + invoice.cost, 150, customerInformationTop + 30)
+    .text("Trips Completed: ", 50, customerInformationTop + 45)
+    .text(invoice.completedTrips, 150, customerInformationTop + 45)
+    .text("Balance Due after Renewal: ", 50, customerInformationTop + 60)
+    .text(invoice.cost - invoice.bill, 150, customerInformationTop + 60)
     .font("Helvetica-Bold")
-    .text("Source: ", 50, customerInformationTop + 45)
-    .text(invoice.source.place_name, 150, customerInformationTop + 45)
-    .text("Destination: ", 50, customerInformationTop + 60)
-    .text(invoice.destination.place_name, 150, customerInformationTop + 60)
+    .text("Source: ", 50, customerInformationTop + 75)
+    .text(invoice.source.place_name, 150, customerInformationTop + 75)
+    .text("Destination: ", 50, customerInformationTop + 90)
+    .text(invoice.destination.place_name, 150, customerInformationTop + 90)
     .moveDown();
 
-  generateHr(doc, 280);
+  generateHr(doc, 400);
 }
 
 
