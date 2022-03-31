@@ -61,7 +61,7 @@ function generateFooter(doc) {
     .text(
       "Thank you for using our service.",
       50,
-      300,
+      420,
       { align: "center", width: 500 }
     );
 }
