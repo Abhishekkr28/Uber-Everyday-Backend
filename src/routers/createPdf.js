@@ -6,7 +6,6 @@ const fs = require("fs");
 const path = require("path");
 const User = require("../models/user.js");
 
-
 function generateHeader(doc) {
   doc
     // .image("logo.png", 50, 45, { width: 50 })
@@ -21,10 +20,7 @@ function generateHeader(doc) {
 }
 
 function generateCustomerInformation(doc, invoice) {
-  doc
-    .fillColor("#444444")
-    .fontSize(20)
-    .text("Invoice", 50, 160);
+  doc.fillColor("#444444").fontSize(20).text("Invoice", 50, 160);
 
   generateHr(doc, 185);
 
@@ -32,57 +28,49 @@ function generateCustomerInformation(doc, invoice) {
   const date = new Date().toLocaleDateString();
   doc
     .fontSize(10)
-    .text("Invoice Number:", 50, customerInformationTop)
+    .text("Invoice ID:", 50, customerInformationTop)
     .font("Helvetica-Bold")
-    .text(invoice.id, 150, customerInformationTop)
+    .text(invoice._id, 150, customerInformationTop)
     .font("Helvetica")
     .text("Invoice Date:", 50, customerInformationTop + 15)
     .text(date, 150, customerInformationTop + 15)
     .text("Bill:", 50, customerInformationTop + 30)
-    .text("INR " + invoice.cost, 150, customerInformationTop + 30)
-    .text("Trips Completed: ", 50, customerInformationTop + 45)
-    .text(invoice.completedTrips, 150, customerInformationTop + 45)
-    .text("Balance left: ", 50, customerInformationTop + 60)
-    .text(invoice.cost - invoice.bill, 150, customerInformationTop + 60)
+    .text("INR " + invoice.cost.toFixed(2), 150, customerInformationTop + 30)
+    .text("Trips Expected: ", 50, customerInformationTop + 45)
+    .text(invoice.totalTripsPlanned, 150, customerInformationTop + 45)
+    .text("Trips Completed: ", 50, customerInformationTop + 60)
+    .text(invoice.completedTrips, 150, customerInformationTop + 60)
+    .text("Balance Left: ", 50, customerInformationTop + 75)
+    .text(
+      "INR " + (invoice.cost.toFixed(2) - invoice.bill.toFixed(2)).toFixed(2),
+      150,
+      customerInformationTop + 75
+    )
     .font("Helvetica-Bold")
-    .text("Source: ", 50, customerInformationTop + 75)
-    .text(invoice.source.place_name, 150, customerInformationTop + 75)
-    .text("Destination: ", 50, customerInformationTop + 90)
-    .text(invoice.destination.place_name, 150, customerInformationTop + 90)
+    .text("Source: ", 50, customerInformationTop + 90)
+    .text(invoice.source.place_name, 150, customerInformationTop + 90)
+    .text("Destination: ", 50, customerInformationTop + 105)
+    .text(invoice.destination.place_name, 150, customerInformationTop + 105)
     .moveDown();
 
-  generateHr(doc, 400);
+  generateHr(doc, 340);
 }
 
-
 function generateFooter(doc) {
-  doc
-    .fontSize(10)
-    .text(
-      "Thank you for using our service.",
-      50,
-      410,
-      { align: "center", width: 500 }
-    );
+  doc.fontSize(10).text("Thank you for using our service.", 50, 410, {
+    align: "center",
+    width: 500,
+  });
 }
 
 function generateHr(doc, y) {
-  doc
-    .strokeColor("#aaaaaa")
-    .lineWidth(1)
-    .moveTo(50, y)
-    .lineTo(550, y)
-    .stroke();
+  doc.strokeColor("#aaaaaa").lineWidth(1).moveTo(50, y).lineTo(550, y).stroke();
 }
 const generateInvoice = async (doc, data) => {
-
   generateHeader(doc);
   generateCustomerInformation(doc, data);
   generateFooter(doc);
-
 };
-
-
 
 const getInvoice = async (req, res) => {
   try {
