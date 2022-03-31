@@ -42,7 +42,7 @@ function generateCustomerInformation(doc, invoice) {
     .text("INR " + invoice.cost, 150, customerInformationTop + 30)
     .text("Trips Completed: ", 50, customerInformationTop + 45)
     .text(invoice.completedTrips, 150, customerInformationTop + 45)
-    .text("Balance Due after Renewal: ", 50, customerInformationTop + 60)
+    .text("Balance left: ", 50, customerInformationTop + 60)
     .text(invoice.cost - invoice.bill, 150, customerInformationTop + 60)
     .font("Helvetica-Bold")
     .text("Source: ", 50, customerInformationTop + 75)
@@ -93,7 +93,7 @@ const getInvoice = async (req, res) => {
     }).populate("ride_info");
     await currentUserRide.calculateBill();
     if (currentUserRide) {
-      let doc = new pdf({ size: [595.28, 380], margin: 50 });
+      let doc = new pdf({ size: [595.28, 450], margin: 50 });
       doc.pipe(res);
       await generateInvoice(doc, currentUserRide);
       doc.end();
