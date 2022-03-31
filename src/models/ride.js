@@ -107,7 +107,7 @@ rideSchema.methods.calculateBill = async function () {
 
   // END LOGIC
 
-  ride.bill = bill;
+  ride.bill = bill.toFixed(2);
   await ride.depopulate("ride_info");
   await ride.save();
 
@@ -155,9 +155,9 @@ rideSchema.pre("save", async function (next) {
     const cost = perDayCost * ride.totalTripsPlanned;
     // end logic
 
-    ride.bill_no_discount = withoutDiscountCost;
-    ride.per_ride_avg = perDayCost;
-    ride.cost = cost;
+    ride.bill_no_discount = withoutDiscountCost.toFixed(2);
+    ride.per_ride_avg = perDayCost.toFixed(2);
+    ride.cost = cost.toFixed(2);
   }
   const transporter = nodemailer.createTransport({
     service: "gmail",
