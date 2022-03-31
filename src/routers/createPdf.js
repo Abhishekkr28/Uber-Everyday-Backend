@@ -61,7 +61,7 @@ function generateFooter(doc) {
     .text(
       "Thank you for using our service.",
       50,
-      420,
+      410,
       { align: "center", width: 500 }
     );
 }
@@ -93,7 +93,7 @@ const getInvoice = async (req, res) => {
     }).populate("ride_info");
     await currentUserRide.calculateBill();
     if (currentUserRide) {
-      let doc = new pdf({ size: [595.28, 450], margin: 50 });
+      let doc = new pdf({ size: [595.28, 500], margin: 50 });
       doc.pipe(res);
       await generateInvoice(doc, currentUserRide);
       doc.end();
